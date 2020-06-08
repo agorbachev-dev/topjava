@@ -2,7 +2,9 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.DAO.MealDAO.MealDaoInMemoryImplementation;
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.TimeUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,20 +29,45 @@ public class MealServlet extends HttpServlet {
 
         String action = (actionObj == null) ? "" : actionObj;
         Long id = (idObj == null) ? null : Long.valueOf(idObj);
-
         boolean error;
-        switch (action.toLowerCase()) {
+        switch (action) {
             case "edit":
+                req.setAttribute("display","inline");
+                error = edit(id,req);
                 break;
             case "delete":
+                req.setAttribute("display","none");
                 error = delete(id);
-                listAll(req,resp);
                 break;
             case "create":
+                req.setAttribute("display","none");
+                error = create(req);
+                break;
+            case "showCreateEditForm":
+                req.setAttribute("display","inline");
+                break;
+            case "list":
+                req.setAttribute("display","none");
                 break;
             default:
-                listAll(req, resp);
                 break;
+        }
+        listAll(req, resp);
+    }
+
+    private boolean create(HttpServletRequest req) {
+        dao.create(new Meal(TimeUtil.parseStrToLocalDateTime(req.getParameter("dateTime").replace('T',' ')),
+                req.getParameter("description"),
+                Integer.parseInt(req.getParameter("calories"))));
+        return false;
+    }
+
+    private boolean edit(Long id, HttpServletRequest req) {
+        if (id != null) {
+            dao.update(id, new String[]{req.getParameter("dateTime").replace('T', ' '),req.getParameter("description"),req.getParameter("calories")});
+            return false;
+        } else {
+            return true;
         }
     }
 

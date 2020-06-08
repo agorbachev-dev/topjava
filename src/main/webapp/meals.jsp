@@ -10,7 +10,7 @@
 
 <h1>Meals Management</h1>
 <h2>
-    <a href="${pageContext.request.contextPath}/meals?action=create">Add new meal</a>
+    <a href="${pageContext.request.contextPath}/meals?action=showCreateEditForm">Add new meal</a>
     &nbsp;&nbsp;&nbsp;
     <a href="${pageContext.request.contextPath}/meals?action=list">List all meals</a>
 
@@ -28,10 +28,20 @@
             <td>${f:parseLocalDateTimeToStr(mealTo.dateTime)}</td>
             <td>${mealTo.description}</td>
             <td>${mealTo.calories}</td>
-            <td>edit</td>
-            <td><a href="?action=delete&id=<c:out value='${mealTo.id}'/>"><img src="img/del.png" alt="delete"></a></td>
+            <td><a href="${pageContext.request.contextPath}/meals?action=edit&id=<c:out value='${mealTo.id}'/>">edit</a></td>
+            <td><a href="${pageContext.request.contextPath}/meals?action=delete&id=<c:out value='${mealTo.id}'/>">Delete</a></td>
         </tr>
     </c:forEach>
 </table>
+<br><br>
+<form action="meals?action=create" method="get" style="display: <c:out value="${display}"/>" >
+    <label for="dateTime">Дата/время</label><br>
+    <input type="datetime-local" id="dateTime" name="dateTime" required><br>
+    <label for="description">Описание</label><br>
+    <input type="text" id="description" name="description" required><br>
+    <label for="calories">Калории</label><br>
+    <input type="text" id="calories" name="calories" required>
+    <input type="submit" value="Сохранить">
+</form>
 </body>
 </html>
