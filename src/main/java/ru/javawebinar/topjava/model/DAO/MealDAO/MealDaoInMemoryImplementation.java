@@ -4,6 +4,8 @@ import ru.javawebinar.topjava.model.DAO.Dao;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.TimeUtil;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,6 +15,10 @@ public class MealDaoInMemoryImplementation implements Dao<Meal> {
 
     private static final AtomicLong id = new AtomicLong(0L);
     private static final ConcurrentHashMap<Long, Meal> mealInMemory = new ConcurrentHashMap<>();
+
+    public int getExcess() {
+        return 2000;
+    }
 
     @Override
     public void create(Meal meal) {
