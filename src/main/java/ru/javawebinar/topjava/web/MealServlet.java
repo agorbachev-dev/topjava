@@ -27,27 +27,28 @@ public class MealServlet extends HttpServlet {
         String actionObj = req.getParameter("action");
         String idObj = req.getParameter("id");
 
-        String action = (actionObj == null) ? "" : actionObj;
-        Long id = (idObj == null) ? null : Long.valueOf(idObj);
-        boolean error;
-        switch (action) {
+        String action = (actionObj == null) ? "" : actionObj.trim();
+        Long id = (idObj == null || "".equals(idObj)) ? null : Long.valueOf(idObj.trim());
+        req.setAttribute("display","none");
+        switch (action.toLowerCase()) {
             case "edit":
-                req.setAttribute("display","inline");
-                error = edit(id,req);
+                edit(id,req);
                 break;
             case "delete":
-                req.setAttribute("display","none");
-                error = delete(id);
+                delete(id);
                 break;
             case "create":
-                req.setAttribute("display","none");
-                error = create(req);
+                create(req);
                 break;
-            case "showCreateEditForm":
+            case "showcreateeditform":
+                String actionType = req.getParameter("actionType").trim();
+                req.setAttribute("actionType",actionType);
+                if("edit".equals(actionType)){
+                    req.setAttribute("mealToEdit",dao.get(id));
+                }
                 req.setAttribute("display","inline");
                 break;
             case "list":
-                req.setAttribute("display","none");
                 break;
             default:
                 break;
@@ -55,20 +56,16 @@ public class MealServlet extends HttpServlet {
         listAll(req, resp);
     }
 
-    private boolean create(HttpServletRequest req) {
+    private void create(HttpServletRequest req) {
         dao.create(new Meal(TimeUtil.parseStrToLocalDateTime(req.getParameter("dateTime").replace('T',' ')),
                 req.getParameter("description"),
                 Integer.parseInt(req.getParameter("calories"))));
-        return false;
     }
 
-    private boolean edit(Long id, HttpServletRequest req) {
-        if (id != null) {
-            dao.update(id, new String[]{req.getParameter("dateTime").replace('T', ' '),req.getParameter("description"),req.getParameter("calories")});
-            return false;
-        } else {
-            return true;
-        }
+    private void edit(Long id, HttpServletRequest req) {
+        if (id != null)
+            dao.update(id, new String[]{req.getParameter("dateTime").trim().replace('T', ' '),req.getParameter("description").trim(),req.getParameter("calories").trim()});
+
     }
 
     private void listAll(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -76,13 +73,9 @@ public class MealServlet extends HttpServlet {
         req.getRequestDispatcher("/meals.jsp").forward(req, resp);
     }
 
-    private boolean delete(Long id) {
-        if (id != null) {
+    private void delete(Long id) {
+        if (id != null)
             dao.delete(id);
-            return false;
-        } else {
-            return true;
-        }
     }
 
     @Override
