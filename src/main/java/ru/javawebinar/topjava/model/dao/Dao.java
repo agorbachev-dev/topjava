@@ -1,15 +1,15 @@
-package ru.javawebinar.topjava.model.DAO;
+package ru.javawebinar.topjava.model.dao;
 
 import java.util.List;
 
 public interface Dao<T> {
-    void create(T t);
+    T create(T t);
 
     T get(long id);
 
     List<T> getAll();
 
-    void update(long id, String[] params);
+    T update(T t);
 
     void delete(long id);
 }

@@ -1,11 +1,10 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
-import ru.javawebinar.topjava.model.DAO.MealDAO.MealDaoInMemoryImplementation;
-import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.dao.MealDaoInMemoryImplementation;
 import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.util.TimeUtil;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,70 +16,36 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
 
-    private static final Logger log = getLogger(MealServlet.class);
-    private final MealDaoInMemoryImplementation dao = new MealDaoInMemoryImplementation();
+    private Logger log;
+    private MealDaoInMemoryImplementation dao;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        log = getLogger(MealServlet.class);
+        dao = MealDaoInMemoryImplementation.getInstance();
+        super.init(config);
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-
-        String actionObj = req.getParameter("action");
-        String idObj = req.getParameter("id");
-
-        String action = (actionObj == null) ? "" : actionObj.trim();
-        Long id = (idObj == null || "".equals(idObj)) ? null : Long.valueOf(idObj.trim());
-        req.setAttribute("display","none");
-        switch (action.toLowerCase()) {
-            case "edit":
-                edit(id,req);
-                break;
-            case "delete":
-                delete(id);
-                break;
-            case "create":
-                create(req);
-                break;
-            case "showcreateeditform":
-                String actionType = req.getParameter("actionType").trim();
-                req.setAttribute("actionType",actionType);
-                if("edit".equals(actionType)){
-                    req.setAttribute("mealToEdit",dao.get(id));
-                }
-                req.setAttribute("display","inline");
-                break;
-            case "list":
-                break;
-            default:
-                break;
+        log.debug("method get start running");
+        String action = req.getParameter("action");
+        String idFromParameter = req.getParameter("id");
+        if ("delete".equals(action)) {
+            log.debug("action = delete");
+            if (idFromParameter != null && !"".equals(idFromParameter)) {
+                delete(Long.parseLong(idFromParameter));
+            }
         }
-        listAll(req, resp);
-    }
-
-    private void create(HttpServletRequest req) {
-        dao.create(new Meal(TimeUtil.parseStrToLocalDateTime(req.getParameter("dateTime").replace('T',' ')),
-                req.getParameter("description"),
-                Integer.parseInt(req.getParameter("calories"))));
-    }
-
-    private void edit(Long id, HttpServletRequest req) {
-        if (id != null)
-            dao.update(id, new String[]{req.getParameter("dateTime").trim().replace('T', ' '),req.getParameter("description").trim(),req.getParameter("calories").trim()});
-
-    }
-
-    private void listAll(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("mealToList", MealsUtil.filteredByStreams(dao.getAll(), LocalTime.MIN, LocalTime.MAX, dao.getExcess()));
+        req.setAttribute("mealToList", MealsUtil.filteredByStreams(dao.getAll(), LocalTime.MIN, LocalTime.MAX, MealsUtil.getExcess()));
+        log.debug("forward to meals page");
+        log.debug("method get stop running");
         req.getRequestDispatcher("/meals.jsp").forward(req, resp);
     }
 
     private void delete(Long id) {
-        if (id != null)
-            dao.delete(id);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        doGet(req, resp);
+        dao.delete(id);
+        log.debug("meal with id = " + id + " deleted");
     }
 }
