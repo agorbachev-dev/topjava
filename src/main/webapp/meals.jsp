@@ -21,7 +21,7 @@
     <h3><a href="index.html">Home</a></h3>
     <hr>
     <h2>Meals</h2>
-    <h3><a href="${pageContext.request.contextPath}/edit-meal?action=create">Add new meal</a></h3>
+    <h3><a href="${pageContext.request.contextPath}/editForm.jsp?action=create">Add new meal</a></h3>
     <table>
         <tr>
             <th>Дата/время</th>
@@ -36,7 +36,7 @@
             <td>${mealTo.dateTime}</td>
             <td>${mealTo.description}</td>
             <td>${mealTo.calories}</td>
-            <td><a href="${pageContext.request.contextPath}/edit-meal?action=edit&id=${mealTo.id}">edit</a></td>
+            <td><a href="${pageContext.request.contextPath}/editForm.jsp?action=edit&id=${mealTo.id}&dateTime=${mealTo.dateTime}&description=${mealTo.description}&calories=${mealTo.calories}">edit</a></td>
             <td><a href="${pageContext.request.contextPath}/meals?action=delete&id=${mealTo.id}">delete</a></td>
         </tr>
         </c:forEach>

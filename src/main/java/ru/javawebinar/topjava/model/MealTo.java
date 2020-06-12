@@ -19,7 +19,6 @@ public class MealTo {
         this.description = description;
         this.calories = calories;
         this.excess = excess;
-
     }
 
     @Override
@@ -52,6 +51,4 @@ public class MealTo {
     public boolean isExcess() {
         return excess;
     }
-
-
 }

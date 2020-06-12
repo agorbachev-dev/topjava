@@ -1,13 +1,13 @@
 package ru.javawebinar.topjava.model.dao;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface Dao<T> {
     T create(T t);
 
     T get(long id);
 
-    List<T> getAll();
+    Collection<T> getAll();
 
     T update(T t);
 

@@ -1,9 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%@ taglib prefix = "fn" uri = "http://java.sun.com/jsp/jstl/functions"  %>
 <%@ taglib prefix = "c"  uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
     <head>
-    <title>Meal ${action} form</title>
+    <title>Meal ${param.action} form</title>
     <style>
         #id{
             display: none;
@@ -13,14 +12,14 @@
     <body>
     <h3><a href="index.html">Home</a></h3>
     <hr>
-    <h2>Meal</h2>
-    <form action="edit-meal?action=${action}" method="post">
+    <h2>Meal ${param.action}</h2>
+    <form action="meals?action=${param.action}" method="post">
         <input
                 type="text"
                 id="id"
                 name="id"
-                <c:if test="${action == 'edit'}">
-                       value="${mealToEdit.id}"
+                <c:if test="${param.action == 'edit'}">
+                       value="${param.id}"
                 required
                 </c:if>
         >
@@ -30,8 +29,8 @@
                 type="datetime-local"
                 id="dateTime"
                 name="dateTime"
-                <c:if test="${action == 'edit'}">
-                    value="${mealToEdit.dateTime}"
+                <c:if test="${param.action == 'edit'}">
+                    value="${param.dateTime}"
                 </c:if>
                 required
         >
@@ -42,8 +41,8 @@
                 type="text"
                 id="description"
                 name="description"
-                <c:if test="${action == 'edit'}">
-                    value="${mealToEdit.description}"
+                <c:if test="${param.action == 'edit'}">
+                    value="${param.description}"
                 </c:if>
                 required
         >
@@ -54,8 +53,8 @@
                 type="number"
                 id="calories"
                 name="calories"
-                <c:if test="${action == 'edit'}">
-                    value="${mealToEdit.calories}"
+                <c:if test="${param.action == 'edit'}">
+                    value="${param.calories}"
                 </c:if>
                 required
         >
