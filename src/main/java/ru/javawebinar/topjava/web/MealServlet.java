@@ -17,7 +17,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
@@ -29,7 +31,6 @@ public class MealServlet extends HttpServlet {
         super.init(config);
         filters = new HashMap<>();
         try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
-            System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
             mealRestController = appCtx.getBean(MealRestController.class);
         }
     }
@@ -39,12 +40,9 @@ public class MealServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
         String action = request.getParameter("action");
-        if("filter".equals(action)){
-            filters.put(SecurityUtil.authUserId(),addFilterParametersToMap(request));
-        }else if("nofilter".equals(action)){
-            filters.remove(SecurityUtil.authUserId());
-        }
-        else{
+        if ("filter".equals(action)) {
+            filters.put(SecurityUtil.authUserId(), addFilterParametersToMap(request));
+        } else {
             Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                     LocalDateTime.parse(request.getParameter("dateTime")),
                     request.getParameter("description"),
@@ -58,18 +56,17 @@ public class MealServlet extends HttpServlet {
     }
 
     private Map<String, Object> addFilterParametersToMap(HttpServletRequest request) {
-        Map<String,Object> parameters = new HashMap<>();
-        parameters.put("dateStart",request.getParameter("dateStart").isEmpty() ? LocalDate.MIN : LocalDate.parse(request.getParameter("dateStart")));
-        parameters.put("dateEnd",request.getParameter("dateEnd").isEmpty() ? LocalDate.MAX.minusDays(1L) : LocalDate.parse(request.getParameter("dateEnd")));
-        parameters.put("timeStart",request.getParameter("timeStart").isEmpty() ? LocalTime.MIN : LocalTime.parse(request.getParameter("timeStart")));
-        parameters.put("timeEnd",request.getParameter("timeEnd").isEmpty() ? LocalTime.MAX : LocalTime.parse(request.getParameter("timeEnd")));
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("dateStart", request.getParameter("dateStart").isEmpty() ? LocalDate.MIN : LocalDate.parse(request.getParameter("dateStart")));
+        parameters.put("dateEnd", request.getParameter("dateEnd").isEmpty() ? LocalDate.MAX.minusDays(1L) : LocalDate.parse(request.getParameter("dateEnd")));
+        parameters.put("timeStart", request.getParameter("timeStart").isEmpty() ? LocalTime.MIN : LocalTime.parse(request.getParameter("timeStart")));
+        parameters.put("timeEnd", request.getParameter("timeEnd").isEmpty() ? LocalTime.MAX : LocalTime.parse(request.getParameter("timeEnd")));
         return parameters;
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-
         switch (action == null ? "all" : action) {
             case "delete":
                 int id = getId(request);
@@ -85,10 +82,20 @@ public class MealServlet extends HttpServlet {
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
+            case "nofilter":
+                filters.remove(SecurityUtil.authUserId());
+                response.sendRedirect("meals");
+                break;
             case "all":
             default:
                 log.info("getAll");
-                request.setAttribute("meals", mealRestController.getAll(filters.get(SecurityUtil.authUserId())));
+                if (filters.containsKey(SecurityUtil.authUserId())) {
+                    request.setAttribute("meals", mealRestController.getAll(filters.get(SecurityUtil.authUserId())));
+                    request.setAttribute("filter", filters.get(SecurityUtil.authUserId()));
+                } else {
+                    request.setAttribute("meals", mealRestController.getAll());
+                }
+
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }

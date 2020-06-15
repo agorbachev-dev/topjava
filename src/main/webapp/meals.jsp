@@ -20,7 +20,6 @@
     </style>
 </head>
 <body>
-<>
     <h3><a href="index.html">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
@@ -30,32 +29,33 @@
                 <td>
                     <dl>
                         <dt>Date start:</dt>
-                        <dd><input type="date" name="dateStart"></dd>
+                        <dd><input type="date" name="dateStart" value="${filter == null ? "" : filter.get("dateStart")}"></dd>
                     </dl>
                 </td>
                 <td>
                     <dl>
                     <dt>Date end:</dt>
-                    <dd><input type="date" name="dateEnd"></dd>
+                    <dd><input type="date" name="dateEnd" value="${filter == null ? "" : filter.get("dateEnd")}"></dd>
                     </dl>
                 </td>
                 <td>
                     <dl>
                     <dt>Time start:</dt>
-                    <dd><input type="time" name="timeStart"></dd>
+                    <dd><input type="time" name="timeStart" value="${filter == null ? "" : filter.get("timeStart")}"></dd>
                     </dl>
                 </td>
                 <td>
                     <dl>
                         <dt>Time end:</dt>
-                        <dd><input type="time" name="timeEnd"></dd>
+                        <dd><input type="time" name="timeEnd" value="${filter == null ? "" : filter.get("timeEnd")}"></dd>
                     </dl>
                 </td>
             </tr>
         </table>
         <button type="submit">Filter</button>
-        <button><a href="meals?action=nofilter"></a>Cancel</button>
+
     </form>
+    <button><a href="meals?action=nofilter">Cancel filter</a></button>
     <button><a href="meals?action=create">Add Meal</a></button>
     <br><br>
     <table border="1" cellpadding="8" cellspacing="0">

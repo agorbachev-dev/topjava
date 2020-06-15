@@ -7,7 +7,6 @@ import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Comparator;
@@ -24,9 +23,7 @@ public class InMemoryMealRepository implements MealRepository {
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.MEALS.forEach(meal -> {
-            save(meal, 1);
-        });
+        MealsUtil.MEALS.forEach(meal -> save(meal, 1));
     }
 
     @Override
@@ -54,14 +51,14 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public Collection<Meal> getAll(int userId, Map<String, Object> filterValues) {
         Stream<Meal> rawStream = getOrCreate(userId).values().stream();
-        if(filterValues != null){
+        if (filterValues != null) {
             LocalDate startDate = (LocalDate) filterValues.get("dateStart");
             LocalDate endDate = (LocalDate) filterValues.get("dateEnd");
             LocalTime startTime = (LocalTime) filterValues.get("timeStart");
             LocalTime endTime = (LocalTime) filterValues.get("timeEnd");
             rawStream = rawStream
-                    .filter(meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDate(),startDate,endDate.plusDays(1L)))
-                    .filter(meal -> DateTimeUtil.isBetweenHalfOpen(meal.getTime(),startTime,endTime));
+                    .filter(meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDate(), startDate, endDate.plusDays(1L))
+                            && DateTimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime));
         }
         return rawStream
                 .sorted(Comparator.comparing(Meal::getDateTime, Comparator.reverseOrder()))

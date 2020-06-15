@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.web.meal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import ru.javawebinar.topjava.model.AbstractBaseEntity;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
@@ -9,11 +10,11 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
-import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
 @Controller
 public class MealRestController {
@@ -25,7 +26,8 @@ public class MealRestController {
     }
 
     public Collection<MealTo> getAll(Map<String, Object> filterValues) {
-        return MealsUtil.getTos(service.getAll(SecurityUtil.authUserId(), filterValues), SecurityUtil.authUserCaloriesPerDay());
+        Set<Integer> filteredMealIds = service.getAll(SecurityUtil.authUserId(), filterValues).stream().map(AbstractBaseEntity::getId).collect(Collectors.toSet());
+        return getAll().stream().filter(mealTo -> filteredMealIds.contains(mealTo.getId())).collect(Collectors.toList());
     }
 
     public Meal get(int id) {
@@ -36,7 +38,7 @@ public class MealRestController {
         return service.create(meal, SecurityUtil.authUserId());
     }
 
-    public void delete(int id){
+    public void delete(int id) {
         service.delete(id, SecurityUtil.authUserId());
     }
 
