@@ -1,11 +1,11 @@
 package ru.javawebinar.topjava.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.util.Collection;
+import java.util.Map;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
@@ -19,26 +19,26 @@ public class MealService {
         this.repository = repository;
     }
 
-    public Meal create(Meal meal) {
+    public Meal create(Meal meal, int userId) {
         checkNew(meal);
-        return repository.save(meal);
+        return repository.save(meal, userId);
     }
 
     public boolean delete(int id, int userId) {
-        return get(id, userId) != null && repository.delete(id);
+        checkNotFoundWithId(repository.delete(id, userId), id);
+        return true;
     }
 
     public Meal get(int id, int userId) {
-        Meal meal = checkNotFoundWithId(repository.get(id), id);
-        return meal.getUserId() == userId ? meal : null;
+        return checkNotFoundWithId(repository.get(id, userId), id);
     }
 
-    public Collection<Meal> getAll(Integer userId) {
-        return repository.getAll(userId);
+    public Collection<Meal> getAll(int userId, Map<String, Object> filterValues) {
+        return repository.getAll(userId, filterValues);
     }
 
-    public Meal update(Meal meal) {
-        return get(meal.getId(), meal.getUserId()) != null ? repository.save(meal) : null;
+    public Meal update(Meal meal, int userId) {
+        return checkNotFoundWithId(repository.save(meal, userId), meal.getId());
     }
 
 }

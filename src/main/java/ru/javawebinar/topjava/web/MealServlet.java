@@ -13,19 +13,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
-
+    private Map<Integer, Map<String, Object>> filters;
     private MealRestController mealRestController;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+        filters = new HashMap<>();
         try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
             System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
             mealRestController = appCtx.getBean(MealRestController.class);
@@ -36,16 +38,32 @@ public class MealServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
+        String action = request.getParameter("action");
+        if("filter".equals(action)){
+            filters.put(SecurityUtil.authUserId(),addFilterParametersToMap(request));
+        }else if("nofilter".equals(action)){
+            filters.remove(SecurityUtil.authUserId());
+        }
+        else{
+            Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
+                    LocalDateTime.parse(request.getParameter("dateTime")),
+                    request.getParameter("description"),
+                    Integer.parseInt(request.getParameter("calories"))
+            );
+            log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
+            Meal meal1 = meal.isNew() ? mealRestController.create(meal) : mealRestController.update(meal, Integer.parseInt(id));
 
-        Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
-                LocalDateTime.parse(request.getParameter("dateTime")),
-                request.getParameter("description"),
-                Integer.parseInt(request.getParameter("calories")),
-                null);
-
-        log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-        Meal meal1 = meal.isNew() ? mealRestController.create(meal) : mealRestController.update(meal, Integer.parseInt(id));
+        }
         response.sendRedirect("meals");
+    }
+
+    private Map<String, Object> addFilterParametersToMap(HttpServletRequest request) {
+        Map<String,Object> parameters = new HashMap<>();
+        parameters.put("dateStart",request.getParameter("dateStart").isEmpty() ? LocalDate.MIN : LocalDate.parse(request.getParameter("dateStart")));
+        parameters.put("dateEnd",request.getParameter("dateEnd").isEmpty() ? LocalDate.MAX.minusDays(1L) : LocalDate.parse(request.getParameter("dateEnd")));
+        parameters.put("timeStart",request.getParameter("timeStart").isEmpty() ? LocalTime.MIN : LocalTime.parse(request.getParameter("timeStart")));
+        parameters.put("timeEnd",request.getParameter("timeEnd").isEmpty() ? LocalTime.MAX : LocalTime.parse(request.getParameter("timeEnd")));
+        return parameters;
     }
 
     @Override
@@ -70,7 +88,7 @@ public class MealServlet extends HttpServlet {
             case "all":
             default:
                 log.info("getAll");
-                request.setAttribute("meals", mealRestController.getAll());
+                request.setAttribute("meals", mealRestController.getAll(filters.get(SecurityUtil.authUserId())));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }

@@ -9,36 +9,39 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
 @Controller
 public class MealRestController {
-
     @Autowired
     private MealService service;
 
     public Collection<MealTo> getAll() {
-        return MealsUtil.getTos(service.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay());
+        return MealsUtil.getTos(service.getAll(SecurityUtil.authUserId(), null), SecurityUtil.authUserCaloriesPerDay());
+    }
+
+    public Collection<MealTo> getAll(Map<String, Object> filterValues) {
+        return MealsUtil.getTos(service.getAll(SecurityUtil.authUserId(), filterValues), SecurityUtil.authUserCaloriesPerDay());
     }
 
     public Meal get(int id) {
-        return checkNotFoundWithId(service.get(id, SecurityUtil.authUserId()), id);
+        return service.get(id, SecurityUtil.authUserId());
     }
 
     public Meal create(Meal meal) {
-        meal.setUserId(SecurityUtil.authUserId());
-        return service.create(meal);
+        return service.create(meal, SecurityUtil.authUserId());
     }
 
-    public void delete(int id) {
-        checkNotFoundWithId(service.delete(id, SecurityUtil.authUserId()), id);
+    public void delete(int id){
+        service.delete(id, SecurityUtil.authUserId());
     }
 
     public Meal update(Meal meal, int id) {
-        meal.setUserId(SecurityUtil.authUserId());
         assureIdConsistent(meal, id);
-        return checkNotFoundWithId(service.update(meal), id);
+        return service.update(meal, SecurityUtil.authUserId());
     }
 }
