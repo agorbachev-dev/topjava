@@ -1,6 +1,7 @@
 DELETE FROM user_roles;
-DELETE FROM users;
 DELETE FROM meals;
+DELETE FROM users;
+
 ALTER SEQUENCE global_seq RESTART WITH 100000;
 
 INSERT INTO users (name, email, password) VALUES
@@ -22,16 +23,16 @@ $$;
 CREATE OR REPLACE FUNCTION dateTimeFormat() RETURNS varchar LANGUAGE plpgsql AS $$
 DECLARE format varchar;
 BEGIN
-    format := '"YYYY-MM-dd HH24:mm"';
+    format := 'YYYY-MM-DD HH24:MI:SS';
     return format;
 END
 $$;
 
 INSERT INTO meals (user_id, datetime, description, calories) VALUES
-    (getUserForPopulationDB(), to_timestamp('2020/01/30 10:00:00',dateTimeFormat()), 'Завтрак', 500::int),
-    (getUserForPopulationDB(), to_timestamp('2020/01/30 13:00:00',dateTimeFormat()), 'Обед', 1000::int),
-    (getUserForPopulationDB(), to_timestamp('2020/01/30 20:00:00',dateTimeFormat()), 'Ужин', 500::int),
-    (getUserForPopulationDB(), to_timestamp('2020/01/31 00:00:00',dateTimeFormat()), 'Еда на граничное значение', 100::int),
-    (getUserForPopulationDB(), to_timestamp('2020/01/31 10:00:00',dateTimeFormat()), 'Завтрак', 1000::int),
-    (getUserForPopulationDB(), to_timestamp('2020/01/31 13:00:00',dateTimeFormat()), 'Обед', 500::int),
-    (getUserForPopulationDB(), to_timestamp('2020/01/31 20:00:00',dateTimeFormat()), 'Ужин', 410::int);
+    (getUserForPopulationDB(), to_timestamp('2020-01-30 10:00:00',dateTimeFormat()), 'Завтрак', 500::int),
+    (getUserForPopulationDB(), to_timestamp('2020-01-30 13:00:00',dateTimeFormat()), 'Обед', 1000::int),
+    (getUserForPopulationDB(), to_timestamp('2020-01-30 20:00:00',dateTimeFormat()), 'Ужин', 500::int),
+    (getUserForPopulationDB(), to_timestamp('2020-01-31 00:00:00',dateTimeFormat()), 'Еда на граничное значение', 100::int),
+    (getUserForPopulationDB(), to_timestamp('2020-01-31 10:00:00',dateTimeFormat()), 'Завтрак', 1000::int),
+    (getUserForPopulationDB(), to_timestamp('2020-01-31 13:00:00',dateTimeFormat()), 'Обед', 500::int),
+    (getUserForPopulationDB(), to_timestamp('2020-01-31 20:00:00',dateTimeFormat()), 'Ужин', 410::int);
