@@ -22,16 +22,16 @@ $$;
 CREATE OR REPLACE FUNCTION dateTimeFormat() RETURNS varchar LANGUAGE plpgsql AS $$
 DECLARE format varchar;
 BEGIN
-    format := 'DD/MM/YYYY HH24:MI:SS';
+    format := '"YYYY-MM-dd HH24:mm"';
     return format;
 END
 $$;
 
 INSERT INTO meals (user_id, datetime, description, calories) VALUES
-    (getUserForPopulationDB(), to_timestamp('30/01/2020 10:00:00',dateTimeFormat()), 'Завтрак', 500::int),
-    (getUserForPopulationDB(), to_timestamp('30/01/2020 13:00:00',dateTimeFormat()), 'Обед', 1000::int),
-    (getUserForPopulationDB(), to_timestamp('30/01/2020 20:00:00',dateTimeFormat()), 'Ужин', 500::int),
-    (getUserForPopulationDB(), to_timestamp('31/01/2020 00:00:00',dateTimeFormat()), 'Еда на граничное значение', 100::int),
-    (getUserForPopulationDB(), to_timestamp('31/01/2020 10:00:00',dateTimeFormat()), 'Завтрак', 1000::int),
-    (getUserForPopulationDB(), to_timestamp('31/01/2020 13:00:00',dateTimeFormat()), 'Обед', 500::int),
-    (getUserForPopulationDB(), to_timestamp('31/01/2020 20:00:00',dateTimeFormat()), 'Ужин', 410::int);
+    (getUserForPopulationDB(), to_timestamp('2020/01/30 10:00:00',dateTimeFormat()), 'Завтрак', 500::int),
+    (getUserForPopulationDB(), to_timestamp('2020/01/30 13:00:00',dateTimeFormat()), 'Обед', 1000::int),
+    (getUserForPopulationDB(), to_timestamp('2020/01/30 20:00:00',dateTimeFormat()), 'Ужин', 500::int),
+    (getUserForPopulationDB(), to_timestamp('2020/01/31 00:00:00',dateTimeFormat()), 'Еда на граничное значение', 100::int),
+    (getUserForPopulationDB(), to_timestamp('2020/01/31 10:00:00',dateTimeFormat()), 'Завтрак', 1000::int),
+    (getUserForPopulationDB(), to_timestamp('2020/01/31 13:00:00',dateTimeFormat()), 'Обед', 500::int),
+    (getUserForPopulationDB(), to_timestamp('2020/01/31 20:00:00',dateTimeFormat()), 'Ужин', 410::int);
