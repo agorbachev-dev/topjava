@@ -1,7 +1,8 @@
-Codacy Badge
-Build Status
 Java Enterprise Online Project 
 ===============================
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7762c489faf7476193ccdfae8d14199e)](https://app.codacy.com/manual/agorbachev-dev/topjava?utm_source=github.com&utm_medium=referral&utm_content=agorbachev-dev/topjava&utm_campaign=Badge_Grade_Dashboard)
+
 Разработка полнофункционального Spring/JPA Enterprise приложения c авторизацией и правами доступа на основе ролей с использованием наиболее популярных инструментов и технологий Java: Maven, Spring MVC, Security, JPA(Hibernate), REST(Jackson), Bootstrap (css,js), datatables, jQuery + plugins, Java 8 Stream and Time API и хранением в базах данных Postgresql и HSQLDB.
 
 ![topjava_structure](https://user-images.githubusercontent.com/13649199/27433714-8294e6fe-575e-11e7-9c41-7f6e16c5ebe5.jpg)
@@ -43,9 +44,11 @@ Java Enterprise Online Project
     -  <a href="https://blog.interlinked.org/tutorials/git.html">Git Overview</a>
     -  [Основы Git за 20 минут](https://www.youtube.com/watch?v=TMeZGvtQnT8)
     -  [Git - для новичков](https://www.youtube.com/watch?list=PLY4rE9dstrJyTdVJpv7FibSaXB4BHPInb&v=PEKN8NtBDQ0)
+    - [Руководство по написанию комментариев в коммитах](https://techrocks.ru/2019/12/02/writing-good-commit-messages)
 
 ##  ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 3. <a href="https://drive.google.com/open?id=0B9Ye2auQ_NsFZDdaaU5fZEo4X3c">Работа с проектом (выполнять инструкции)</a>
-**ВНИМАНИЕ: выбирайте для проекта простой пусть без пробелов и русских букв, например (Windows) `c:\projects\topjava\`. Иначе впоследствии будут проблемы**
+- **ВНИМАНИЕ: выбирайте для проекта простой пусть без пробелов и русских букв, например (Windows) `c:\projects\topjava\`. Иначе впоследствии будут проблемы**
+- **Плагин уже Git Intergation не требуется и вкладку `Version control` в IDEA переименовали в `Git`**
 ### Патч [prepare_to_HW0.patch](https://drive.google.com/file/d/1LNPpu9OkuCpfpD8ZJHO-o0vwu49p2i5M) (скачать и положить в каталог вашего проекта)
 
 > Проект постоянно улучшается, поэтому видео иногда отличается от кода проекта. Изменения указываю после видео: 
@@ -116,10 +119,10 @@ Java Enterprise Online Project
    - [Сергей Куксенко — Stream API, часть 1](https://www.youtube.com/watch?v=O8oN4KSZEXE)
    - [Сергей Куксенко — Stream API, часть 2](https://www.youtube.com/watch?v=i0Jr2l3jrDA)
 
-### Optional 2 (+5 бонусов)
+### Optional 2 (+5 бонусов, только после выполнения базового и Optional задания!)
 Сделать реализацию со сложностью O(N) (обратите внимание на п.13 замечаний):
 - циклом за 1 проход по `List<UserMeal>`
-  - без циклов по другим коллекциям
+  - без циклов по другим коллекциям (к ним также относим методы коллекций `addAll()/removeAll()`)
   - решение должно быть рабочим в общем случае (не только при запуске main)
 - через Stream API за 1 проход по исходному списку `meals.streem()`
   - нельзя использовать внешние коллекции, не являющиеся частью коллектора или 2 раза проходить по исходному списку (в том числе модифицированному, например отфильтрованному).
@@ -154,7 +157,7 @@ Java Enterprise Online Project
 - 10: `System.out.println` нельзя делать нигде, кроме как в `main`. Позже введем логирование.
 - 11: Результаты, возвращаемые `UserMealsUtil.filteredByStreams` мы будем использовать [в нашем приложении](http://topjava.herokuapp.com/) для фильтрации по времени и отображения еды правильным цветом.
 - 12: Обращайте внимание на комментарии к вашим коммитам в git. Они должны быть короткие и информативные (лучше на english)
-- 13: Не полагайтесь в решении на то, что список будет подаваться отсортированным. Такого условия нет.
+- 13: Не полагайтесь в решении на то, что список еды будет подаваться отсортированным. Такого условия нет.
 -----
 ## [Пример 7-го занятия онлайн стажировки, несколько видео открыто](https://github.com/JavaOPs/topjava/blob/master/doc/lesson07.md)
 
