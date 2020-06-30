@@ -1,7 +1,15 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.AfterClass;
+import org.junit.AssumptionViolatedException;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -10,8 +18,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Month;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
@@ -28,6 +40,85 @@ public class MealServiceTest {
 
     @Autowired
     private MealService service;
+
+    private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
+
+    private static final Map<String, Map<String, Object>> testInfo = new HashMap<>();
+
+    @Rule
+    public final TestRule watchman = new TestWatcher() {
+        @Override
+        protected void succeeded(Description description) {
+            testInfo.get(description.getMethodName()).put("testPassing", "succeeded");
+        }
+
+        @Override
+        protected void failed(Throwable e, Description description) {
+            testInfo.get(description.getMethodName()).put("testPassing", "failed");
+        }
+
+        @Override
+        protected void skipped(AssumptionViolatedException e, Description description) {
+            testInfo.get(description.getMethodName()).put("testPassing", "skipped");
+        }
+
+        @Override
+        protected void starting(Description description) {
+            testInfo.put(description.getMethodName(), new HashMap<>());
+            testInfo.get(description.getMethodName()).put("startTime", LocalTime.now());
+            super.starting(description);
+        }
+
+        @Override
+        protected void finished(Description description) {
+            testInfo.get(description.getMethodName()).put("endTime", LocalTime.now());
+            super.finished(description);
+        }
+    };
+
+    @AfterClass
+    public static void afterClass() {
+        String skipped = "";
+        String succeeded = "";
+        String failed = "";
+
+        for (Map.Entry<String, Map<String, Object>> pair : testInfo.entrySet()) {
+
+            String testPassing = (String) pair.getValue().get("testPassing");
+
+            LocalTime startTime = (LocalTime) pair.getValue().get("startTime");
+            LocalTime endTime = (LocalTime) pair.getValue().get("endTime");
+
+            String execTime = String.valueOf(Duration.between(startTime, endTime).toMillis() / 1000D);
+
+            String a = pair.getKey() + " - exec time: " + execTime + " sec";
+
+            switch (testPassing) {
+                case "succeeded":
+                    succeeded += a + "\n";
+                    break;
+                case "failed":
+                    failed += a + "\n";
+                    break;
+                default:
+                    skipped += a + "\n";
+                    break;
+            }
+        }
+        log.info("\n" +
+                "\n================================TEST PASSED===============================\n" +
+                "\n" +
+                succeeded +
+                "\n" +
+                "\n================================TEST FAILED===============================\n" +
+                "\n" +
+                failed +
+                "\n" +
+                "\n================================TEST SKIPPED===============================\nх" +
+                "\n" +
+                skipped
+        );
+    }
 
     @Test
     public void delete() throws Exception {
