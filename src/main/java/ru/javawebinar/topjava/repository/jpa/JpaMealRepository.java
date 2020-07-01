@@ -47,6 +47,7 @@ public class JpaMealRepository implements MealRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Meal get(int id, int userId) {
         return DataAccessUtils.singleResult(em.createNamedQuery(Meal.GET, Meal.class)
                 .setParameter("id", id)
@@ -55,6 +56,7 @@ public class JpaMealRepository implements MealRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Meal> getAll(int userId) {
         return em.createNamedQuery(Meal.GET_ALL, Meal.class)
                 .setParameter("userId", userId)
@@ -63,6 +65,7 @@ public class JpaMealRepository implements MealRepository {
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
         return em.createNamedQuery(Meal.GET_ALL_FILTERED, Meal.class)
                 .setParameter("userId", userId)
