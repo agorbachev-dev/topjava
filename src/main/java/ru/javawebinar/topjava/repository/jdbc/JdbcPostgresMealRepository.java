@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-@Profile(Profiles.POSTGRES_DB)
+@Profile({Profiles.POSTGRES_DB})
 public class JdbcPostgresMealRepository extends JdbcMealRepository {
 
     @Autowired

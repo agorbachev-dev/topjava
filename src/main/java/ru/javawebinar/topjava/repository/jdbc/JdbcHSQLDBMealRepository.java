@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-@Profile(Profiles.HSQL_DB)
+@Profile({Profiles.HSQL_DB})
 public class JdbcHSQLDBMealRepository extends JdbcMealRepository {
 
     @Autowired
