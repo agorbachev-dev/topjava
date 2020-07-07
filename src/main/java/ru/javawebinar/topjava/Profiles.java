@@ -10,6 +10,8 @@ public class Profiles {
             POSTGRES_DB = "postgres",
             HSQL_DB = "hsqldb";
 
+    public static final String REPOSITORY_IMPLEMENTATION = DATAJPA;
+
     //  Get DB profile depending of DB driver in classpath
     public static String getActiveDbProfile() {
         try {
@@ -21,26 +23,6 @@ public class Profiles {
                 return Profiles.HSQL_DB;
             } catch (ClassNotFoundException e) {
                 throw new IllegalStateException("Could not find DB driver");
-            }
-        }
-    }
-
-    //  Get DB profile depending of DB driver in classpath
-    public static String getActiveRepositoryProfile() {
-        try {
-            Class.forName("ru.javawebinar.topjava.repository.datajpa.DataJpaMealRepository");
-            return DATAJPA;
-        } catch (ClassNotFoundException exception) {
-            try {
-                Class.forName("ru.javawebinar.topjava.repository.jpa.JpaMealRepository");
-                return Profiles.JPA;
-            } catch (ClassNotFoundException exception1) {
-                try {
-                    Class.forName("ru.javawebinar.topjava.repository.jdbc.JdbcMealRepository");
-                    return Profiles.JDBC;
-                } catch (ClassNotFoundException exception2) {
-                    throw new IllegalStateException("Could not load any repository");
-                }
             }
         }
     }
