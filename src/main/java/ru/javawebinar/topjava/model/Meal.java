@@ -43,8 +43,11 @@ public class Meal extends AbstractBaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
+    @NotNull(groups = JdbcValidationExcluded.class)
     private User user;
+
+    public interface JdbcValidationExcluded {
+    }
 
     public Meal() {
     }
