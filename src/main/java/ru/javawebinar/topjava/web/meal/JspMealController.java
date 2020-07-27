@@ -21,6 +21,7 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 @RequestMapping(value = "/meals")
 public class JspMealController extends AbstractMealController {
 
+
     @GetMapping("/delete")
     public String delete(HttpServletRequest request) {
         super.delete(getId(request));
