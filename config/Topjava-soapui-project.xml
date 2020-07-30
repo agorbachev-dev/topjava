@@ -81,10 +81,10 @@
                     </con:settings>
                     <con:endpoint>http://localhost:8080</con:endpoint>
                     <con:request>{"name": "New2",
- "email": "new2@yandex.ru",
- "password": "passwordNew",
- "roles": ["ROLE_USER"]
-}
+                        "email": "new2@yandex.ru",
+                        "password": "passwordNew",
+                        "roles": ["USER"]
+                        }
                     </con:request>
                     <con:originalUri>http://localhost/topjava/rest/admin/users</con:originalUri>
                     <con:credentials>
@@ -182,10 +182,10 @@
                     </con:settings>
                     <con:endpoint>http://localhost:8080</con:endpoint>
                     <con:request>{"name": "UserUpdated",
- "email": "user@yandex.ru",
- "password": "passwordNew",
- "roles": ["ROLE_USER"]
-}
+                        "email": "user@yandex.ru",
+                        "password": "passwordNew",
+                        "roles": ["USER"]
+                        }
                     </con:request>
                     <con:originalUri>http://localhost/topjava/rest/admin/users/100000</con:originalUri>
                     <con:credentials>
@@ -301,10 +301,10 @@
                     </con:settings>
                     <con:endpoint>http://localhost:8080</con:endpoint>
                     <con:request>{"name": "New777",
- "email": "new777@yandex.ru",
- "password": "passwordNew",
- "roles": ["ROLE_USER"]
-}
+                        "email": "new777@yandex.ru",
+                        "password": "passwordNew",
+                        "roles": ["USER"]
+                        }
                     </con:request>
                     <con:originalUri>http://localhost/topjava/rest/profile</con:originalUri>
                     <con:credentials>
