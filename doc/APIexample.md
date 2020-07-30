@@ -13,7 +13,7 @@ $ curl -X GET {root}/rest/meals/{id}
 ```
 - create meal 
 ``` bash
-$ curl -X POST 'http:{root}/rest/meals' \
+$ curl -X POST '{root}/rest/meals' \
   -H 'Content-Type: application/json' \
   -d '{
       "dateTime": "yyyy-MM-ddThh:mm:ss",
