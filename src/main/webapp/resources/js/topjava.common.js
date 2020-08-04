@@ -1,11 +1,11 @@
-var context, form;
+let context, form;
 
 function makeEditable(ctx) {
     context = ctx;
     form = $('#detailsForm');
     $(".delete").click(function () {
         if (confirm('Are you sure?')) {
-            deleteRow($(this).attr("id"));
+            deleteRow($(this).attr("data-oId"));
         }
     });
 
