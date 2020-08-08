@@ -1,44 +1,43 @@
-$(function () {
-    makeEditable({
-        ajaxUrl: "ajax/meals/",
-        datatableApi: $("#mealsTable").DataTable({
-            "paging": false,
-            "info": true,
-            "columns": [
-                {
-                    "data": "dateTime"
-                },
-                {
-                    "data": "description"
-                },
-                {
-                    "data": "calories"
-                },
-                {
-                    "defaultContent": "Edit",
-                    "orderable": false
-                },
-                {
-                    "defaultContent": "Delete",
-                    "orderable": false
-                }
-            ],
-            "order": [
-                [
-                    0,
-                    "desc"
-                ]
+let ctx = {
+    ajaxUrl: "ajax/meals/",
+    datatableApi: $("#mealsTable").DataTable({
+        "paging": false,
+        "info": true,
+        "columns": [
+            {
+                "data": "dateTime"
+            },
+            {
+                "data": "description"
+            },
+            {
+                "data": "calories"
+            },
+            {
+                "defaultContent": "Edit",
+                "orderable": false
+            },
+            {
+                "defaultContent": "Delete",
+                "orderable": false
+            }
+        ],
+        "order": [
+            [
+                0,
+                "desc"
             ]
-        })
-    });
-});
+        ]
+    })
+};
 
 function filter() {
-    $("#filterForm").data() = JSON.stringify($("#filterForm").serializeArray());
+    let form = $("#filterForm");
+    localStorage.setItem("mealFilter", JSON.stringify(form.serializeArray()));
     $.ajax({
         type: "POST",
         url: context.ajaxUrl + "filter",
-        data: $("#filterForm").serialize(),
+        data: form.serialize(),
     }).done(function (data) {
         context.datatableApi.clear().rows.add(data).draw();
         return false;
@@ -46,25 +45,32 @@ function filter() {
 }
 
 function clearFilter() {
-    filterparams = null;
+    localStorage.setItem("mealFilter","");
     $("#filterForm")[0].reset();
     updateTable();
     return false;
 }
 
 function filterOnReload() {
-    if (filterparams != null) {
-        populate("#filterForm", $.parseJSON(filterparams));
+    if (localStorage.getItem("mealFilter").length > 2){
+        populateForm();
+        filter();
     }
     return false;
 }
 
-function populate(frm, data) {
-    $.each(data, function (key, value) {
-        $('[name=' + key + ']', frm).val(value);
-    });
-}
-
 $(window).on("load", function () {
-    filterOnReload()
+    makeEditable(ctx);
+    filterOnReload();
 });
+
+const populateForm = () => {
+    let formElementsArray = $("#filterForm")[0].elements;
+    let json = localStorage.getItem("mealFilter");
+    if (json.length > 2) {
+        const savedData = JSON.parse(json); // get and parse the saved data from localStorage
+        for (let i = 0; i < savedData.length; i++) {
+            formElementsArray[savedData[i].name].value = savedData[i].value;
+        }
+    }
+};

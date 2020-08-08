@@ -47,6 +47,7 @@ function save() {
     }).done(function () {
         $("#editRow").modal("hide");
         updateTable();
+        filterOnReload();
         successNoty("Saved");
     });
 }
