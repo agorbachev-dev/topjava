@@ -5,6 +5,8 @@
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
+<script type="text/javascript" src="resources/js/topjava.common.js" defer></script>
+<script type="text/javascript" src="resources/js/topjava.meals.js" defer></script>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 
 <div class="jumbotron pt-4">
@@ -27,7 +29,10 @@
                 <dt><spring:message code="meal.endTime"/>:</dt>
                 <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
             </dl>
-            <button class="btn btn-primary" onclick="filter()"><spring:message code="meal.filter"/></button>
+            <button type="button" class="btn btn-primary" onclick="filter()" id="filterButton"><spring:message
+                    code="meal.filter"/></button>
+            <button type="button" class="btn btn-primary" onclick="clearFilter()" id="resetFilterButton"><spring:message
+                    code="meal.clearFilter"/></button>
         </form>
         <hr>
         <button class="btn btn-primary" onclick="add()">
@@ -35,7 +40,7 @@
             <spring:message code="common.add"/>
         </button>
         <hr>
-        <table class="table table-striped" id="datatable">
+        <table class="table table-striped" id="mealsTable">
             <thead>
             <tr>
                 <th><spring:message code="meal.dateTime"/></th>
@@ -52,7 +57,7 @@
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>
                     <td><a href="meals/update?id=${meal.id}"><span class="fa fa-pencil"></span></a></td>
-                    <td><a class="delete" id="${meal.id}"><span class="fa fa-remove"></span></a></td>
+                    <td><a class="delete" data-oId="${meal.id}"><span class="fa fa-remove"></span></a></td>
                 </tr>
             </c:forEach>
         </table>
@@ -103,7 +108,5 @@
     </div>
 </div>
 <jsp:include page="fragments/footer.jsp"/>
-<script type="text/javascript" src="resources/js/topjava.common.js" defer></script>
-<script type="text/javascript" src="resources/js/topjava.meals.js" defer></script>
 </body>
 </html>

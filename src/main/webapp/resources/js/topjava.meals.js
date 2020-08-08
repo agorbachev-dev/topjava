@@ -1,7 +1,7 @@
 $(function () {
     makeEditable({
-        ajaxUrl: "meals/",
-        datatableApi: $("#datatable").DataTable({
+        ajaxUrl: "ajax/meals/",
+        datatableApi: $("#mealsTable").DataTable({
             "paging": false,
             "info": true,
             "columns": [
@@ -30,14 +30,41 @@ $(function () {
                 ]
             ]
         })
-    })
+    });
 });
 
 function filter() {
-    $.get(
-        context.ajaxUrl + "filter/"
-        , $("#filterForm").serialize()
-        , function (data) {
-            context.datatableApi.clear().rows.add(data).draw();
-        })
-};
+    $("#filterForm").data() = JSON.stringify($("#filterForm").serializeArray());
+    $.ajax({
+        type: "POST",
+        url: context.ajaxUrl + "filter",
+        data: $("#filterForm").serialize(),
+    }).done(function (data) {
+        context.datatableApi.clear().rows.add(data).draw();
+        return false;
+    });
+}
+
+function clearFilter() {
+    filterparams = null;
+    $("#filterForm")[0].reset();
+    updateTable();
+    return false;
+}
+
+function filterOnReload() {
+    if (filterparams != null) {
+        populate("#filterForm", $.parseJSON(filterparams));
+    }
+    return false;
+}
+
+function populate(frm, data) {
+    $.each(data, function (key, value) {
+        $('[name=' + key + ']', frm).val(value);
+    });
+}
+
+$(window).on("load", function () {
+    filterOnReload()
+});

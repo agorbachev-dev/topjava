@@ -2,7 +2,7 @@
 $(function () {
     makeEditable({
             ajaxUrl: "admin/users/",
-            datatableApi: $("#datatable").DataTable({
+            datatableApi: $("#usersTable").DataTable({
                 "paging": false,
                 "info": true,
                 "columns": [
