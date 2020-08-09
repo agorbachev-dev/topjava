@@ -40,3 +40,26 @@ $(function () {
         }
     );
 });
+
+function changeUserActive(id) {
+    let checked = $(this).className.split(/\s+/);
+    let element = $(this);
+    $.ajax({
+        url: context.ajaxUrl + "activity/" + id,
+        type: "POST",
+        data: 'enabled=' + checked
+    }).done(function () {
+        if (checked) {
+            element.parent().parent().removeClass("userDisabled");
+            element.parent().parent().addClass("userEnabled");
+        } else {
+            element.parent().parent().addClass("userDisabled");
+            element.parent().parent().removeClass("userEnabled");
+        }
+        updateTable();
+    })
+}
+
+function changeClass(elem) {
+
+}
