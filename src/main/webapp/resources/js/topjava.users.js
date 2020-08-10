@@ -41,25 +41,13 @@ $(function () {
     );
 });
 
-function changeUserActive(id) {
-    let checked = $(this).className.split(/\s+/);
-    let element = $(this);
+function changeUserActive(id, enabled) {
     $.ajax({
         url: context.ajaxUrl + "activity/" + id,
         type: "POST",
-        data: 'enabled=' + checked
+        data: 'enabled=' + !enabled
     }).done(function () {
-        if (checked) {
-            element.parent().parent().removeClass("userDisabled");
-            element.parent().parent().addClass("userEnabled");
-        } else {
-            element.parent().parent().addClass("userDisabled");
-            element.parent().parent().removeClass("userEnabled");
-        }
         updateTable();
+        location.reload();
     })
-}
-
-function changeClass(elem) {
-
 }

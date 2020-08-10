@@ -27,12 +27,8 @@ tr[data-mealExcess="true"] {
     cursor: pointer;
 }
 
-.userEnabled {
-    background: lightgreen !important;
-}
-
 .userDisabled {
-    background: lightcoral !important;
+    color: darkgray  !important;
 }
 
 /*https://getbootstrap.com/docs/4.0/examples/sticky-footer/sticky-footer.css*/
