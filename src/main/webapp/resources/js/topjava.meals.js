@@ -4,7 +4,7 @@ function updateFilteredTable() {
     $.ajax({
         type: "GET",
         url: mealAjaxUrl + "filter",
-        data: $("#filter").serialize()
+        data: $("#filter").serialize(),
     }).done(updateTableByData);
 }
 

@@ -143,11 +143,11 @@
 <script>
     jQuery('#startDate').datetimepicker({
         timepicker: false,
-        format: 'd.m.Y',
+        format: 'Y-m-d',
     });
     jQuery('#endDate').datetimepicker({
         timepicker: false,
-        format: 'd.m.Y',
+        format: 'Y-m-d',
     });
     jQuery('#startTime').datetimepicker({
         datepicker: false,
@@ -158,7 +158,7 @@
         format: 'h:i',
     });
     jQuery('#datetimepickerModal').datetimepicker({
-        format: 'd.m.Y h:i',
+        format: 'Y-m-d h:i',
     });
 </script>
 </html>
