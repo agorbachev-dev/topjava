@@ -60,6 +60,6 @@ $(function () {
                 $(row).attr("data-mealExcess", data.excess);
             }
         }),
-        updateTable: updateFilteredTable
+        updateTable: updateFilteredTable,
     });
 });
