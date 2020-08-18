@@ -12,6 +12,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -144,5 +145,17 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(USER_WITH_MEALS_MATCHER.contentJson(ADMIN));
+    }
+
+
+    @Test
+    void createDuplicateEmail() throws Exception {
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(ADMIN))
+                .content("{\"name\":\"New User\",\"email\":\"user@yandex.ru\",\"password\":\"test-password\"}"));
+        //.andExpect(status().isUnprocessableEntity());
+        //ErrorInfo errorInfoReceived = readFromJson(action, ErrorInfo.class);
+        //assertEquals(errorInfoReceived.getType(), ErrorType.DATA_ERROR);
     }
 }
