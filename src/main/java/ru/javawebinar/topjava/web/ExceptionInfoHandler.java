@@ -41,7 +41,7 @@ public class ExceptionInfoHandler {
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
         ErrorInfo errorInfo = logAndGetErrorInfo(req, e.getCause(), true, DATA_ERROR);
         if (errorInfo.getDetail().contains("users_unique_email_idx")) {
-            return new ErrorInfo(errorInfo.getUrl(), errorInfo.getType(), "User with this email already exists");
+            return new ErrorInfo(errorInfo.getUrl(), DATA_ERROR, "User with this email already exists");
         }
         return errorInfo;
     }
