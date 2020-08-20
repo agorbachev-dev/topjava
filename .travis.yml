@@ -15,11 +15,15 @@ before_script:
 # https://docs.travis-ci.com/user/customizing-the-build#Building-Specific-Branches
 branches:
   only:
-  - master
+    - master
 
 # https://stackoverflow.com/a/49852690/548473:
 services:
   - postgresql
+
+#https://docs.travis-ci.com/user/environment-variables#Default-Environment-Variables
+env:
+  - TOPJAVA_ROOT=$TRAVIS_BUILD_DIR
 
 # https://docs.travis-ci.com/user/notifications#Configuring-email-notifications
 #notifications:
